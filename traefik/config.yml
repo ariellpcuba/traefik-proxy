@@ -1,0 +1,30 @@
+http:
+  routers:
+    traefik:
+      rule: "Host(`panel.cuban.tech`)"
+      service: "api@internal"
+      tls:
+        domains:
+          - main: "cuban.tech"
+            sans:
+              - "*.cuban.tech"
+      middlewares:   
+        - "traefik-auth"
+
+  middlewares:
+    traefik-auth:
+      basicAuth:
+        users:
+          - "proxy:$apr1$K53Oga6d$RyVu0.SkhP0RRKHynkYmP1"
+
+tls:
+  certificates:
+    - certFile: "/etc/certs/cubantech.crt"
+      keyFile: "/etc/certs/cubantech.key"
+      stores:
+        - default
+  stores:
+    default:
+      defaultCertificate:
+        certFile: "/etc/certs/cubantech.crt"
+        keyFile: "/etc/certs/cubantech.key"
